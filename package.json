@@ -1,10 +1,12 @@
 {
-  "name": "linkedin-mcp-server",
+  "name": "@himanshu31shr/linkedin-mcp-server",
   "version": "1.0.0",
   "description": "MCP server for LinkedIn API integration — compatible with all major AI IDEs",
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "bin": {
-    "linkedin-mcp-server": "./dist/index.js"
+    "linkedin-mcp-server": "dist/index.js"
   },
   "files": [
     "dist"
@@ -19,8 +21,27 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
     "lint": "tsc --noEmit",
-    "inspect": "npx @modelcontextprotocol/inspector node dist/index.js"
+    "inspect": "npx @modelcontextprotocol/inspector node dist/index.js",
+    "prepublishOnly": "npm run lint && npm test && npm run build"
   },
+  "keywords": [
+    "mcp",
+    "linkedin",
+    "model-context-protocol",
+    "ai",
+    "agent",
+    "oauth"
+  ],
+  "license": "MIT",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/himanshu31shr/linkedin-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/himanshu31shr/linkedin-mcp-server/issues"
+  },
+  "homepage": "https://github.com/himanshu31shr/linkedin-mcp-server#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",
     "dotenv": "^17.4.2",

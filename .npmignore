@@ -1,0 +1,16 @@
+node_modules/
+coverage/
+tests/
+scripts/
+.github/
+.claude/
+.env
+.env.example
+*.log
+.DS_Store
+*.tsbuildinfo
+vitest.config.ts
+vitest.e2e.config.ts
+tsconfig.json
+AGENTS.md
+CLAUDE.md
