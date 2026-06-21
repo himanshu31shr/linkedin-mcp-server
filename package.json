@@ -1,6 +1,6 @@
 {
   "name": "@himanshu31shr/linkedin-mcp-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MCP server for LinkedIn API integration — compatible with all major AI IDEs",
   "type": "module",
   "main": "./dist/index.js",
