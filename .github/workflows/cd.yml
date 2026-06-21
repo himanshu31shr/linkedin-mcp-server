@@ -1,14 +1,16 @@
-name: Continuous Deployment
+name: Publish to npm
 
 on:
   push:
-    branches: [ "main" ]
+    tags:
+      - 'v*'
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
-  build-and-commit:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,23 +22,36 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build app
+      - name: Validate tag matches package.json version
+        run: |
+          TAG_VERSION="${GITHUB_REF#refs/tags/v}"
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "::error::Tag version ($TAG_VERSION) does not match package.json version ($PKG_VERSION)"
+            exit 1
+          fi
+          echo "✅ Tag v$TAG_VERSION matches package.json version"
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Run tests with coverage
+        run: npm run test:coverage
+
+      - name: Build
         run: npm run build
 
-      - name: Commit and push built files
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dist/
-          
-          # Check if there are any changes to commit
-          if ! git diff --cached --quiet; then
-            git commit -m "chore: update built dist files [skip ci]"
-            git push
-          else
-            echo "No changes in dist/ to commit"
-          fi
+      - name: Publish to npm
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
