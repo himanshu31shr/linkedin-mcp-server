@@ -1,5 +1,6 @@
 import { formatToolError, formatToolResult } from '../utils/errors.js';
 import { createChildLogger } from '../utils/logger.js';
+import { GetProfileInputSchema, GetEmailInputSchema } from '../schemas/profile.js';
 const log = createChildLogger('profile-tools');
 /**
  * Get the authenticated user's LinkedIn profile.
@@ -47,13 +48,13 @@ export async function getEmail(client) {
 export function registerProfileTools(server, client) {
     server.registerTool('get_profile', {
         description: "Get the authenticated user's LinkedIn profile including name, email, picture, and unique ID",
-        inputSchema: {},
+        inputSchema: GetProfileInputSchema.shape,
     }, async () => {
         return getProfile(client);
     });
     server.registerTool('get_email', {
         description: "Get the authenticated user's LinkedIn email address",
-        inputSchema: {},
+        inputSchema: GetEmailInputSchema.shape,
     }, async () => {
         return getEmail(client);
     });
