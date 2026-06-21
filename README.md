@@ -179,6 +179,24 @@ If you want to contribute or run from source:
 | `npm run lint` | Type-check with TypeScript |
 | `npm run inspect` | Launch MCP Inspector for debugging |
 
+## Releasing a New Version
+
+The CD pipeline automatically publishes to npm when a version tag is pushed.
+
+```bash
+# Bump version (creates commit + tag automatically)
+npm version patch   # or: npm version minor / npm version major
+
+# Push commit and tag to trigger publish
+git push origin main --tags
+```
+
+The pipeline will:
+1. Validate the tag matches `package.json` version
+2. Run lint, tests, and build
+3. Publish to npm with [provenance](https://docs.npmjs.com/generating-provenance-statements)
+4. Create a GitHub Release with auto-generated notes
+
 ## License
 
 MIT
